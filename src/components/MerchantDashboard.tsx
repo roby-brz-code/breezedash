@@ -10,8 +10,8 @@ const formatDate = (dateStr: string) =>
 
 const merchantData = {
   name: "Pickem",
-  payInBalance: 487320.5,
-  payoutBalance: 50000.0,
+  payInBalance: 198696.15,
+  payoutBalance: 463624.35,
   payInVolume: 20298.91,
   payOutVolume: 13713.86,
   settlementSchedule: "T+3 Business Days",
