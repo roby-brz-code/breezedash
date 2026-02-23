@@ -10,16 +10,14 @@ const formatDate = (dateStr: string) =>
 
 const merchantData = {
   name: "Pickem",
-  availableBalance: 487320.5,
-  operationalReserve: 175000.0,
-  totalBalance: 662320.5,
-  pendingPayins: 42180.0,
+  payInBalance: 487320.5,
+  payoutBalance: 175000.0,
+  minimumBalance: 50000.0,
   payInVolume: 20298.91,
   payOutVolume: 13713.86,
   settlementSchedule: "T+3 Business Days",
   nextSettlementDate: "2025-02-21",
   nextSettlementAmount: 68450.0,
-  avgDailyPayouts: 25000.0,
 };
 
 const upcomingSettlements = [
@@ -112,7 +110,8 @@ const SidebarItem = ({ icon, label, active, hasArrow }: { icon: string; label: s
 export default function MerchantDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [timePeriod, setTimePeriod] = useState("Weekly");
-  const reservePct = ((merchantData.operationalReserve / merchantData.totalBalance) * 100).toFixed(1);
+  const totalBalance = merchantData.payInBalance + merchantData.payoutBalance;
+  const payInPct = ((merchantData.payInBalance / totalBalance) * 100).toFixed(1);
 
   return (
     <div className="flex min-h-screen bg-gray-50" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
@@ -195,44 +194,44 @@ export default function MerchantDashboard() {
                 </div>
               </div>
 
-              {/* Balance */}
+              {/* Balances */}
               <div className="bg-white rounded-xl border border-gray-200 p-5">
                 <div className="flex items-center gap-2 mb-4">
                   <h3 className="text-blue-600 font-semibold text-sm">Balances</h3>
                 </div>
                 <div className="grid grid-cols-3 gap-6">
                   <div>
-                    <p className="text-xs text-gray-400">Available balance</p>
-                    <p className="text-2xl font-bold text-gray-900 mt-0.5">{formatCurrency(merchantData.availableBalance)}</p>
+                    <p className="text-xs text-gray-400">Pay-in balance</p>
+                    <p className="text-2xl font-bold text-gray-900 mt-0.5">{formatCurrency(merchantData.payInBalance)}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400">Payout balance</p>
+                    <p className="text-2xl font-bold text-gray-900 mt-0.5">{formatCurrency(merchantData.payoutBalance)}</p>
                   </div>
                   <div>
                     <div className="flex items-center">
-                      <p className="text-xs text-gray-400">Operational reserve</p>
-                      <Tooltip text="7x avg daily payouts (3-week rolling). Recalculated weekly. Ensures 1 week of payout runway.">
+                      <p className="text-xs text-gray-400">Minimum balance</p>
+                      <Tooltip text="Hard-coded minimum balance that must be maintained at all times.">
                         <InfoIcon />
                       </Tooltip>
                     </div>
-                    <p className="text-2xl font-bold text-gray-900 mt-0.5">{formatCurrency(merchantData.operationalReserve)}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400">Total balance</p>
-                    <p className="text-2xl font-bold text-gray-900 mt-0.5">{formatCurrency(merchantData.totalBalance)}</p>
+                    <p className="text-2xl font-bold text-gray-900 mt-0.5">{formatCurrency(merchantData.minimumBalance)}</p>
                   </div>
                 </div>
                 {/* Balance bar */}
                 <div className="mt-4">
                   <div className="flex rounded-full h-2 overflow-hidden bg-gray-100">
-                    <div className="bg-blue-500 rounded-l-full transition-all" style={{ width: `${100 - parseFloat(reservePct)}%` }} />
-                    <div className="bg-blue-200 rounded-r-full transition-all" style={{ width: `${reservePct}%` }} />
+                    <div className="bg-blue-500 rounded-l-full transition-all" style={{ width: `${payInPct}%` }} />
+                    <div className="bg-indigo-300 rounded-r-full transition-all" style={{ width: `${100 - parseFloat(payInPct)}%` }} />
                   </div>
                   <div className="flex justify-between mt-1.5">
                     <div className="flex items-center gap-1.5">
                       <div className="w-2 h-2 rounded-full bg-blue-500" />
-                      <span className="text-xs text-gray-400">Available</span>
+                      <span className="text-xs text-gray-400">Pay-in ({payInPct}%)</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <div className="w-2 h-2 rounded-full bg-blue-200" />
-                      <span className="text-xs text-gray-400">Reserve ({reservePct}%)</span>
+                      <div className="w-2 h-2 rounded-full bg-indigo-300" />
+                      <span className="text-xs text-gray-400">Payout ({(100 - parseFloat(payInPct)).toFixed(1)}%)</span>
                     </div>
                   </div>
                 </div>
