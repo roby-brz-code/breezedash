@@ -11,8 +11,7 @@ const formatDate = (dateStr: string) =>
 const merchantData = {
   name: "Pickem",
   payInBalance: 487320.5,
-  payoutBalance: 175000.0,
-  minimumBalance: 50000.0,
+  payoutBalance: 50000.0,
   payInVolume: 20298.91,
   payOutVolume: 13713.86,
   settlementSchedule: "T+3 Business Days",
@@ -199,23 +198,20 @@ export default function MerchantDashboard() {
                 <div className="flex items-center gap-2 mb-4">
                   <h3 className="text-blue-600 font-semibold text-sm">Balances</h3>
                 </div>
-                <div className="grid grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 gap-6">
                   <div>
                     <p className="text-xs text-gray-400">Pay-in balance</p>
                     <p className="text-2xl font-bold text-gray-900 mt-0.5">{formatCurrency(merchantData.payInBalance)}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400">Payout balance</p>
-                    <p className="text-2xl font-bold text-gray-900 mt-0.5">{formatCurrency(merchantData.payoutBalance)}</p>
-                  </div>
-                  <div>
                     <div className="flex items-center">
-                      <p className="text-xs text-gray-400">Minimum balance</p>
-                      <Tooltip text="Hard-coded minimum balance that must be maintained at all times.">
+                      <p className="text-xs text-gray-400">Payout balance</p>
+                      <Tooltip text="Payout balance is set to the minimum balance threshold. This amount is reserved for payouts.">
                         <InfoIcon />
                       </Tooltip>
                     </div>
-                    <p className="text-2xl font-bold text-gray-900 mt-0.5">{formatCurrency(merchantData.minimumBalance)}</p>
+                    <p className="text-2xl font-bold text-gray-900 mt-0.5">{formatCurrency(merchantData.payoutBalance)}</p>
+                    <p className="text-xs text-gray-400 mt-1">= Minimum balance</p>
                   </div>
                 </div>
                 {/* Balance bar */}
@@ -227,11 +223,11 @@ export default function MerchantDashboard() {
                   <div className="flex justify-between mt-1.5">
                     <div className="flex items-center gap-1.5">
                       <div className="w-2 h-2 rounded-full bg-blue-500" />
-                      <span className="text-xs text-gray-400">Pay-in ({payInPct}%)</span>
+                      <span className="text-xs text-gray-400">Pay-in</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <div className="w-2 h-2 rounded-full bg-indigo-300" />
-                      <span className="text-xs text-gray-400">Payout ({(100 - parseFloat(payInPct)).toFixed(1)}%)</span>
+                      <span className="text-xs text-gray-400">Payout (min. balance)</span>
                     </div>
                   </div>
                 </div>
